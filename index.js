@@ -7,9 +7,9 @@ module.exports = function (energy, opts) {
 };
 
 function Relay (energy, opts) {
-    [ 'defend', 'attack', 'throughput', 'radius', 'storage', 'generate' ]
-        .forEach(function (key) { if (!energy[key]) energy[key] = 0 })
-    ;
+    [ 'defend', 'attack', 'storage' ].forEach(function (key) {
+        if (!energy[key]) energy[key] = 0;
+    });
     this.energy = energy;
     this.delay = opts.delay || 1000;
 }
@@ -18,7 +18,8 @@ inherits(Relay, EventEmitter);
 
 Relay.prototype.attack = function (defender) {
     var attack = new EventEmitter;
-    var attacker = this;
+    attack.defender = defender;
+    var attacker = attack.attacker = this;
     
     var iv = setInterval(function () {
         var sum = attacker.energy.attack + defender.energy.defend;

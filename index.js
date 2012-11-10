@@ -44,6 +44,8 @@ Relay.prototype.attack = function (defender) {
         if (defender.energy.defend < 0) defender.energy.defend = 0;
         
         attack.emit('delta', deltas);
+        defender.emit('damage', -deltas.defend, attacker);
+        attacker.emit('cost', { type : 'attack', value : -deltas.attack });
         
         if (defender.energy.defend === 0) {
             attack.cancel();
@@ -56,8 +58,14 @@ Relay.prototype.attack = function (defender) {
         }
     }, this.delay);
     
-    attack.cancel = function () { clearInterval(iv) };
+    attack.cancel = function () {
+        if (!attack.ended) attack.emit('end');
+        attack.ended = true;
+        clearInterval(iv);
+    };
+    
     this.on('defeat', function () { attack.cancel() });
+    defender.on('defeat', function () { attack.cancel() });
     
     return attack;
 };

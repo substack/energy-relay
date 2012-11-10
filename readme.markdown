@@ -2,6 +2,8 @@
 
 game mechanics for proximity-based energy relay realtime strategy games
 
+[![build status](https://secure.travis-ci.org/substack/energy-relay.png)](http://travis-ci.org/substack/energy-relay)
+
 # example
 
 ``` js

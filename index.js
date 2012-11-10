@@ -16,51 +16,48 @@ function Relay (energy, opts) {
 
 inherits(Relay, EventEmitter);
 
-Relay.prototype.attack = function (n, target) {
-    var self = this;
-    
-    if (target === undefined) {
-        target = n;
-        n = self.energy.attack;
-    }
-    
+Relay.prototype.attack = function (defender) {
     var attack = new EventEmitter;
+    var attacker = this;
+    
     var iv = setInterval(function () {
-        n = Math.min(n, self.energy.attack);
+        var sum = attacker.energy.attack + defender.energy.defend;
         
-        var power = {
-            defend : Math.floor((target.energy.defend + 1) * Math.random()),
-            attack : Math.floor((n + 1) * Math.random())
+        var da = Math.ceil(
+            Math.log(Math.ceil(Math.pow(2, Math.random() * 4) * sum))
+            / Math.log(2)
+        );
+        
+        var dd = Math.ceil(
+            Math.log(Math.ceil(Math.pow(2, Math.random() * 4) * sum))
+            / Math.log(1.9)
+        );
+        
+        var deltas = {
+            attack : da > dd ? 0 : -da,
+            defend : dd > da ? 0 : -dd,
         };
+        attacker.energy.attack += deltas.attack;
+        defender.energy.defend += deltas.defend;
         
-        var damage = Math.max(0, Math.abs(power.attack - power.defend));
-        var delta = {
-            defend : power.attack > power.defend
-                ? - damage : 0,
-            attack : power.attack > power.defend
-                ? 0 : - damage
-            ,
-        };
+        if (attacker.energy.attack < 0) attacker.energy.attack = 0;
+        if (defender.energy.defend < 0) defender.energy.defend = 0;
         
-        n = Math.max(0, n + delta.attack);
-        self.energy.attack = Math.max(0, self.energy.attack + delta.attack);
-        target.energy.defend = Math.max(0, target.energy.defend + delta.defend);
+        attack.emit('delta', deltas);
         
-        attack.emit('damage', - delta.defend);
-        
-        if (target.energy.defend === 0) {
-            attack.emit('success');
-            target.emit('defeat');
+        if (defender.energy.defend === 0) {
             attack.cancel();
+            attack.emit('success');
+            defender.emit('defeat');
         }
-        else if (n === 0) {
+        else if (attacker.energy.attack === 0) {
             attack.cancel();
             attack.emit('failure');
         }
-    }, self.delay);
+    }, this.delay);
     
     attack.cancel = function () { clearInterval(iv) };
-    self.on('defeat', function () { attack.cancel() });
+    this.on('defeat', function () { attack.cancel() });
     
     return attack;
 };

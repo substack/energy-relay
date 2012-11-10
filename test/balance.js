@@ -3,37 +3,43 @@ var test = require('tap').test;
 var SIZE = 10000;
 
 test('balanced levels', function (t) { 
-    t.plan(14);
+    t.plan(15);
     
     play(10, 10, function (counts) {
+        console.dir([ '10 v 10', counts ]);
         t.ok(counts.success + counts.failure === SIZE);
-        t.ok(counts.success < counts.failure);
+        t.ok(counts.success < 5500);
         t.ok(counts.success > 3500);
     });
     
     play(20, 10, function (counts) {
+        console.dir([ '20 v 10', counts ]);
         t.ok(counts.success + counts.failure === SIZE);
         t.ok(counts.success > 5500);
-        t.ok(counts.success < 7500);
+        t.ok(counts.success < 8500);
     });
     
     play(50, 10, function (counts) {
+        console.dir([ '50 v 10', counts ]);
         t.ok(counts.success + counts.failure === SIZE);
         t.ok(counts.success > 9000);
-        t.ok(counts.success < 9900);
     });
     
     play(100, 10, function (counts) {
+        console.dir([ '100 v 10', counts ]);
         t.ok(counts.success + counts.failure === SIZE);
         t.ok(counts.success > 9900);
     });
     
     play(100, 100, function (counts) {
+        console.dir([ '100 v 100', counts ]);
         t.ok(counts.success + counts.failure === SIZE);
-        t.ok(counts.success > 3000); // blarg too lenient but whatevs
+        t.ok(counts.success > 3500);
+        t.ok(counts.success < 5200);
     });
     
     play(100, 1000, function (counts) {
+        console.dir([ '100 v 1000', counts ]);
         t.ok(counts.success + counts.failure === SIZE);
         t.ok(counts.success < 10);
     });

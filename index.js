@@ -25,13 +25,15 @@ Relay.prototype.attack = function (defender) {
         var sum = attacker.energy.attack + defender.energy.defend;
         
         var da = Math.ceil(
-            Math.log(Math.ceil(Math.pow(2, Math.random() * 4) * sum))
-            / Math.log(2)
+            Math.log(Math.max(
+                1, Math.ceil(Math.pow(2, Math.random() * 4) * sum)
+            )) / Math.log(2)
         );
         
         var dd = Math.ceil(
-            Math.log(Math.ceil(Math.pow(2, Math.random() * 4) * sum))
-            / Math.log(1.9)
+            Math.log(Math.max(
+                1, Math.ceil(Math.pow(2, Math.random() * 4) * (sum + 1))
+            )) / Math.log(2)
         );
         
         var deltas = {

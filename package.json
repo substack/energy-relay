@@ -1,0 +1,38 @@
+{
+    "name" : "energy-relay",
+    "version" : "0.0.0",
+    "description" : "game mechanics for proximity-based energy relay realtime strategy games",
+    "main" : "index.js",
+    "directories" : {
+        "example" : "example",
+        "test" : "test"
+    },
+    "dependencies" : {
+        "clone" : "~0.1.1",
+        "inherits" : "~1.0.0"
+    },
+    "devDependencies" : {
+        "tap" : "~0.3.0"
+    },
+    "scripts" : {
+        "test" : "tap test/*.js"
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/substack/energy-relay.git"
+    },
+    "homepage" : "https://github.com/substack/energy-relay",
+    "keywords" : [
+        "game",
+        "energy",
+        "logic",
+        "engine",
+        "mechanics"
+    ],
+    "author" : {
+        "name" : "James Halliday",
+        "email" : "mail@substack.net",
+        "url" : "http://substack.net"
+    },
+    "license" : "MIT"
+}

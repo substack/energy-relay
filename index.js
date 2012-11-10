@@ -33,27 +33,27 @@ Relay.prototype.attack = function (n, target) {
             attack : Math.floor((n + 1) * Math.random())
         };
         
+        var damage = Math.max(0, Math.abs(power.attack - power.defend));
         var delta = {
-            defend : power.attack > power.defend ? - power.attack : 0,
-            attack : power.attack > power.defend ? 0 : - power.defend
+            defend : power.attack > power.defend
+                ? - damage : 0,
+            attack : power.attack > power.defend
+                ? 0 : - damage
+            ,
         };
         
-        n += delta.attack;
-        self.energy.attack = Math.max(
-            0, self.energy.attack + delta.attack
-        );
-        target.energy.defend = Math.max(
-            0, target.energy.defend + delta.defend
-        );
+        n = Math.max(0, n + delta.attack);
+        self.energy.attack = Math.max(0, self.energy.attack + delta.attack);
+        target.energy.defend = Math.max(0, target.energy.defend + delta.defend);
         
-        attack.emit('damage', -delta.defend);
+        attack.emit('damage', - delta.defend);
         
         if (target.energy.defend === 0) {
             attack.emit('success');
             target.emit('defeat');
             attack.cancel();
         }
-        else if (n <= 0) {
+        else if (n === 0) {
             attack.cancel();
             attack.emit('failure');
         }

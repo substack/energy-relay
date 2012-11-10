@@ -49,13 +49,13 @@ Relay.prototype.attack = function (defender) {
         attacker.emit('cost', { type : 'attack', value : -deltas.attack });
         
         if (defender.energy.defend === 0) {
-            attack.cancel();
             attack.emit('success');
             defender.emit('defeat');
+            attack.cancel();
         }
         else if (attacker.energy.attack === 0) {
-            attack.cancel();
             attack.emit('failure');
+            attack.cancel();
         }
     }, this.delay);
     
